@@ -1,0 +1,162 @@
+{
+  "project_info": {
+    "project_number": "94905772870",
+    "project_id": "dater-4992c",
+    "storage_bucket": "dater-4992c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94905772870:android:42855687381439f7cb9347",
+        "android_client_info": {
+          "package_name": "com.bambo.social"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94905772870-6ikpq8tkp7v3btika9bn1vbs3u71o2bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmZnCuq1U6mdCYwk4AMToBMIEcZqFQh9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94905772870-6ikpq8tkp7v3btika9bn1vbs3u71o2bi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "94905772870-nt2lb9531t02lc7rvr0q99kue3ug9v0n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dater.dater"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94905772870:android:cb740c2dd46f7031cb9347",
+        "android_client_info": {
+          "package_name": "com.eshopsingle.customer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94905772870-6ikpq8tkp7v3btika9bn1vbs3u71o2bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmZnCuq1U6mdCYwk4AMToBMIEcZqFQh9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94905772870-6ikpq8tkp7v3btika9bn1vbs3u71o2bi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "94905772870-nt2lb9531t02lc7rvr0q99kue3ug9v0n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dater.dater"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94905772870:android:7bb337f5210114f5cb9347",
+        "android_client_info": {
+          "package_name": "com.harshRajpurohit.we_chat"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94905772870-cq2mjuotttnf0ge78g1jt5ilcmphfpj7.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.harshRajpurohit.we_chat",
+            "certificate_hash": "a11c69a1b712aa324bf03dd9701f2fc97a9cca36"
+          }
+        },
+        {
+          "client_id": "94905772870-6ikpq8tkp7v3btika9bn1vbs3u71o2bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmZnCuq1U6mdCYwk4AMToBMIEcZqFQh9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94905772870-6ikpq8tkp7v3btika9bn1vbs3u71o2bi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "94905772870-nt2lb9531t02lc7rvr0q99kue3ug9v0n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dater.dater"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94905772870:android:e2b6635ff85358e5cb9347",
+        "android_client_info": {
+          "package_name": "d.family.may2024"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94905772870-6ikpq8tkp7v3btika9bn1vbs3u71o2bi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmZnCuq1U6mdCYwk4AMToBMIEcZqFQh9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94905772870-6ikpq8tkp7v3btika9bn1vbs3u71o2bi.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "94905772870-nt2lb9531t02lc7rvr0q99kue3ug9v0n.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dater.dater"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
