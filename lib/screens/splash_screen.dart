@@ -2,11 +2,15 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../../main.dart';
 import '../api/apis.dart';
+import 'auth/login_binding.dart';
 import 'auth/login_screen.dart';
-import 'home_screen.dart';
+import 'home/home_binding.dart';
+import 'home/home_screen.dart';
 
 //splash screen
 class SplashScreen extends StatefulWidget {
@@ -29,13 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
       if (APIs.auth.currentUser != null) {
         log('\nUser: ${APIs.auth.currentUser}');
-        //navigate to home screen
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const HomeScreen()));
+        Get.to(() => HomeScreen(), binding: HomeBinding());
       } else {
-        //navigate to login screen
-        Navigator.pushReplacement(
-            context, MaterialPageRoute(builder: (_) => const LoginScreen()));
+        Get.to(() => LoginScreen(), binding: LoginBinding());
       }
     });
   }
@@ -46,6 +46,7 @@ class _SplashScreenState extends State<SplashScreen> {
     mq = MediaQuery.of(context).size;
 
     return Scaffold(
+
       //body
       body: Stack(children: [
         //app logo
@@ -53,7 +54,13 @@ class _SplashScreenState extends State<SplashScreen> {
             top: mq.height * .15,
             right: mq.width * .25,
             width: mq.width * .5,
-            child: Container( height : 500 , width: 800 ,child: Image.asset('images/icon.png', fit: BoxFit.cover,))),
+            child: Container(
+                height: 400,
+                width: 1000,
+                child: Image.asset(
+                  'images/icon.png',
+                  fit: BoxFit.fitHeight,
+                ))),
 
         //google login button
         Positioned(
