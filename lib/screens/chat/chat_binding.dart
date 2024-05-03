@@ -17,6 +17,6 @@ class ChatBinding extends Bindings {
   @override
   void dependencies() {
     final ChatRepository repository = new ChatRepository(user);
-    Get.lazyPut(() => ChatController(repository));
+    Get.lazyPut(() => ChatController(repository) );
   }
 }
