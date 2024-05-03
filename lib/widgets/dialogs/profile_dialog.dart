@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../main.dart';
 import '../../models/chat_user.dart';
-import '../../screens/view_profile_screen.dart';
+import '../../screens/profile/view_profile_screen.dart';
 
 class ProfileDialog extends StatelessWidget {
   const ProfileDialog({super.key, required this.user});
