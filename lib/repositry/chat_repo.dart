@@ -22,7 +22,6 @@ class ChatRepository {
   static FirebaseAuth get auth => FirebaseAuth.instance;
 
   static User get my_account => auth.currentUser!;
-  final UserRepository _userRepository = UserRepository();
   // for accessing cloud firestore database
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -75,30 +74,6 @@ class ChatRepository {
       lastActive: '',
       pushToken: '');
 
-  // for accessing firebase messaging (Push Notification)
-  static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
-
-  // for getting firebase messaging token
-  static Future<void> getFirebaseMessagingToken() async {
-    await fMessaging.requestPermission();
-
-    await fMessaging.getToken().then((t) {
-      if (t != null) {
-        me.pushToken = t;
-        log('Push Token: $t');
-      }
-    });
-
-    // for handling foreground messages
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      log('Got a message whilst in the foreground!');
-      log('Message data: ${message.data}');
-
-      if (message.notification != null) {
-        log('Message also contained a notification: ${message.notification!.body} 9999 ');
-      }
-    });
-  }
 
   // for sending push notification (Updated Codes)
   static Future<void> sendPushNotification(
@@ -142,11 +117,7 @@ class ChatRepository {
     }
   }
 
-  // for checking if user exists or not?
-  static Future<bool> userExists() async {
-    return (await firestore.collection('users').doc(my_account.uid).get())
-        .exists;
-  }
+
 
   // for adding an chat user for our conversation
   static Future<bool> addChatUser(String email) async {
@@ -178,7 +149,8 @@ class ChatRepository {
   }
 
   // for getting current user info
-  static Future<void> getSelfInfo() async {
+   Future<void> getSelfInfo() async {
+     UserRepository _userRepository = UserRepository();
     await firestore
         .collection('users')
         .doc(my_account.uid)
@@ -186,7 +158,7 @@ class ChatRepository {
         .then((user) async {
       if (user.exists) {
         me = ChatUser.fromJson(user.data()!);
-        await getFirebaseMessagingToken();
+        await _userRepository.getFirebaseMessagingToken();
 
         //for setting user status to active
         APIs.updateActiveStatus(true);
