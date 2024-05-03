@@ -96,27 +96,28 @@ class MessageCard extends StatelessWidget {
   Widget _buildMessageContent() {
     return message.type == Type.text
         ? Text(
-      message.msg,
-      style: const TextStyle(fontSize: 15, color: Colors.black87),
-    )
+            message.msg,
+            style: const TextStyle(fontSize: 15, color: Colors.black87),
+          )
         : ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: Image.network(
-        message.msg,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) return child;
-          return const CircularProgressIndicator();
-        },
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-      ),
-    );
+            borderRadius: BorderRadius.circular(15),
+            child: Image.network(
+              message.msg,
+              loadingBuilder: (context, child, loadingProgress) {
+                if (loadingProgress == null) return child;
+                return const CircularProgressIndicator();
+              },
+              errorBuilder: (context, error, stackTrace) =>
+                  const Icon(Icons.error),
+            ),
+          );
   }
 
   void _showBottomSheet(
-      BuildContext context,
-      MessageDetailController controller,
-      bool isMe,
-      ) {
+    BuildContext context,
+    MessageDetailController controller,
+    bool isMe,
+  ) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -137,23 +138,29 @@ class MessageCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
-            _OptionItem(
-              icon: const Icon(Icons.download_rounded, color: Colors.blue),
-              name: 'Save Image',
-              onTap:(){
-                controller.saveImage(message);
-              },
-            ),
-            if (isMe) _OptionItem(
-              icon: const Icon(Icons.edit, color: Colors.blue),
-              name: 'Edit Message',
-              onTap: () => _showMessageUpdateDialog(context, controller),
-            ),
-            if (isMe) _OptionItem(
-              icon: const Icon(Icons.delete_forever, color: Colors.red),
-              name: 'Delete Message',
-              onTap: controller.deleteMessage,
-            ),
+            if (message.type == Type.image)
+              _OptionItem(
+                icon: const Icon(Icons.download_rounded, color: Colors.blue),
+                name: 'Save Image',
+                onTap: () {
+                  controller.saveImage(message);
+                },
+              ),
+            if (isMe)
+              _OptionItem(
+                icon: const Icon(Icons.edit, color: Colors.blue),
+                name: 'Edit Message',
+                onTap: () => _showMessageUpdateDialog(context, controller),
+              ),
+            if (isMe)
+              _OptionItem(
+                icon: const Icon(Icons.delete_forever, color: Colors.red),
+                name: 'Delete Message',
+                onTap: () {
+                  controller.deleteMessage(message);
+                  Get.back();
+                },
+              ),
             const Divider(color: Colors.black54),
             _OptionItem(
               icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
@@ -178,7 +185,8 @@ class MessageCard extends StatelessWidget {
     showDialog(
       context: context,
       builder: (_) => AlertDialog(
-        contentPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text('Update Message'),
         content: TextFormField(
@@ -190,14 +198,16 @@ class MessageCard extends StatelessWidget {
         actions: [
           MaterialButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel', style: TextStyle(color: Colors.blue, fontSize: 16)),
+            child: const Text('Cancel',
+                style: TextStyle(color: Colors.blue, fontSize: 16)),
           ),
           MaterialButton(
             onPressed: () {
-              controller.editMessage(updatedMsg);
-              Navigator.pop(context);
+              controller.editMessage(message, updatedMsg);
+              Get.back();
             },
-            child: const Text('Update', style: TextStyle(color: Colors.blue, fontSize: 16)),
+            child: const Text('Update',
+                style: TextStyle(color: Colors.blue, fontSize: 16)),
           ),
         ],
       ),
@@ -210,7 +220,8 @@ class _OptionItem extends StatelessWidget {
   final String name;
   final VoidCallback onTap;
 
-  const _OptionItem({required this.icon, required this.name, required this.onTap});
+  const _OptionItem(
+      {required this.icon, required this.name, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
