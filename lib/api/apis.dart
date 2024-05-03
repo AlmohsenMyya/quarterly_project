@@ -105,10 +105,10 @@ class APIs {
     }
   }
 
-  // for checking if user exists or not?
-  static Future<bool> userExists() async {
-    return (await firestore.collection('users').doc(my_account.uid).get()).exists;
-  }
+  // // for checking if user exists or not?
+  // static Future<bool> userExists() async {
+  //   return (await firestore.collection('users').doc(my_account.uid).get()).exists;
+  // }
 
   // for adding an chat user for our conversation
   static Future<bool> addChatUser(String email) async {
