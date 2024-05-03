@@ -38,13 +38,15 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             appBarTheme: const AppBarTheme(
-          centerTitle: true,
-          elevation: 1,
-          iconTheme: IconThemeData(color: Colors.black),
-          titleTextStyle: TextStyle(
-              color: Colors.black, fontWeight: FontWeight.normal, fontSize: 19),
-          backgroundColor: Colors.white,
-        )),
+              centerTitle: true,
+              elevation: 1,
+              iconTheme: IconThemeData(color: Colors.blueGrey),
+              titleTextStyle: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 19),
+              // backgroundColor: Colors.greenAccent,
+            )),
         home: const SplashScreen());
   }
 }
@@ -57,7 +59,7 @@ _initializeFirebase() async {
       id: 'chats',
       importance: NotificationImportance.IMPORTANCE_HIGH,
       name: 'Chats');
-   print("sdcsds");
-   print("dssdvv $result");
+  print("sdcsds");
+  print("dssdvv $result");
   log('\nNotification Channel Result: $result');
 }

@@ -3,73 +3,62 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 import '../models/chat_user.dart';
 
 class UserRepository {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+  UserRepository();
+  static FirebaseAuth get auth => FirebaseAuth.instance;
+
+  static User get _my_account => auth.currentUser!;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  // Get the current authenticated user
-  Future<ChatUser?> getCurrentUser() async {
-    final User? firebaseUser = _auth.currentUser;
-    if (firebaseUser != null) {
-      final DocumentSnapshot<Map<String, dynamic>> snapshot =
-      await _firestore.collection('users').doc(firebaseUser.uid).get();
-      if (snapshot.exists) {
-        return ChatUser.fromJson(snapshot.data()!);
+  // for accessing firebase messaging (Push Notification)
+  static FirebaseMessaging fMessaging = FirebaseMessaging.instance;
+  // for storing self information
+  static ChatUser me = ChatUser(
+      id: _my_account.uid,
+      name: _my_account.displayName.toString(),
+      email: _my_account.email.toString(),
+      about: "Hey, I'm using We Chat!",
+      image: _my_account.photoURL.toString(),
+      createdAt: '',
+      isOnline: false,
+      lastActive: '',
+      pushToken: '');
+
+  // for getting firebase messaging token
+   Future<void> getFirebaseMessagingToken() async {
+
+    await fMessaging.requestPermission();
+
+    await fMessaging.getToken().then((t) {
+      if (t != null) {
+        me.pushToken = t;
+        log('Push Token: $t');
       }
-    }
-    return null;
-  }
+    });
 
-  // Update user profile
-  Future<void> updateProfile(ChatUser user) async {
-    try {
-      final firebaseUser = _auth.currentUser;
-      if (firebaseUser != null) {
-        await _firestore.collection('users').doc(firebaseUser.uid).update(user.toJson());
+    // for handling foreground messages
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      log('Got a message whilst in the foreground!');
+      log('Message data: ${message.data}');
+
+      if (message.notification != null) {
+        log('Message also contained a notification: ${message.notification!.body} 9999 ');
       }
-    } catch (e) {
-      log('Error updating user profile: $e');
-    }
+    });
   }
 
-  // Get all users
-  Future<List<ChatUser>> getAllUsers() async {
-    try {
-      final QuerySnapshot<Map<String, dynamic>> querySnapshot =
-      await _firestore.collection('users').get();
-      return querySnapshot.docs.map((doc) => ChatUser.fromJson(doc.data())).toList();
-    } catch (e) {
-      log('Error fetching all users: $e');
-      return [];
-    }
-  }
-
-  // Sign in with email and password
-  Future<UserCredential?> signInWithEmailPassword(String email, String password) async {
-    try {
-      final UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-        email: email,
-        password: password,
-      );
-      return userCredential;
-    } catch (e) {
-      log('Error signing in with email and password: $e');
-      return null;
-    }
-  }
-
-  // Sign out
-  Future<void> signOut() async {
-    try {
-      await _auth.signOut();
-    } catch (e) {
-      log('Error signing out: $e');
-    }
+  // for checking if user exists or not?
+   Future<bool> userExists() async {
+    return (await _firestore.collection('users').doc(_my_account.uid).get())
+        .exists;
   }
 
 // Other user-related operations can be added here...
