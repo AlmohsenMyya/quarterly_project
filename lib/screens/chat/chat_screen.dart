@@ -7,8 +7,9 @@ import '../../controllers/chat_controller.dart';
 import '../../main.dart';
 import '../../models/chat_user.dart';
 import '../../widgets/app_bars/app_bar_chat.dart';
-import '../../widgets/message_card.dart';
+import 'message_card/message_card.dart';
 import '../../widgets/my_indicator.dart';
+import 'message_card/message_card_binding.dart';
 
 
 class ChatScreen extends GetView<ChatController> {
@@ -23,32 +24,49 @@ class ChatScreen extends GetView<ChatController> {
         flexibleSpace:  buildAppBar(context, controller.repository.user))
       ,
       backgroundColor: const Color.fromARGB(255, 234, 248, 255),
-      body: SafeArea(
-        child: Column(
-          children: [
-            Expanded(
-              child: Obx(() {
-                if (controller.messages.isEmpty) {
-                  return const Center(
-                    child: Text('Say Hii! 👋', style: TextStyle(fontSize: 20)),
-                  );
-                } else {
-                  return ListView.builder(
-                    reverse: true,
-                    itemCount: controller.messages.length,
-                    padding: const EdgeInsets.only(top: 8),
-                    physics: const BouncingScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      return MessageCard(message: controller.messages[index]);
-                    },
-                  );
-                }
-              }),
-            ),
-            if (controller.isUploading.isTrue) buildUploadingIndicator(),
-            BuildChatInput(),
-            if (controller.showEmoji.isTrue) _buildEmojiPicker(),
-          ],
+      body: DecoratedBox(
+        // BoxDecoration takes the image
+        decoration: BoxDecoration(
+          // Image set to background of the body
+          image: DecorationImage(
+              image: AssetImage("images/back.jpg"), fit: BoxFit.cover),
+        ),
+        child: SafeArea(
+          child: Column(
+            children: [
+              Expanded(
+                child: Obx(() {
+                  if (controller.messages.isEmpty) {
+                    return const Center(
+                      child: Text('Say Hii! 👋', style: TextStyle(fontSize: 20)),
+                    );
+                  } else {
+                    return ListView.builder(
+                      reverse: true,
+                      itemCount: controller.messages.length,
+                      padding: const EdgeInsets.only(top: 8),
+                      physics: const BouncingScrollPhysics(),
+                      itemBuilder: (context, index) {
+                        final message = controller.messages[index];
+                        return GestureDetector(
+                          onTap: () => Get.to(
+                                () => MessageCard(message: message),
+                            binding: MessageDetailBinding(message),
+                            arguments: message,
+                          ),
+                          child: MessageCard(message: message),
+                        );
+                      },
+                    );
+
+                  }
+                }),
+              ),
+              if (controller.isUploading.isTrue) buildUploadingIndicator(),
+              BuildChatInput(ontapEmogi: controller.toggleEmoji,),
+
+            ],
+          ),
         ),
       ),
     );
@@ -57,14 +75,4 @@ class ChatScreen extends GetView<ChatController> {
 
 
 
-  Widget _buildEmojiPicker() {
-    // Your emoji picker widget...
-    return    SizedBox(
-      height: mq.height * .35,
-      child: EmojiPicker(
-        textEditingController: controller.textController,
-        config: const Config(),
-      ),
-    );
-  }
 }
