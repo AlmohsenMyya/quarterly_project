@@ -24,16 +24,16 @@ class MessageDetailController extends GetxController {
     }
   }
 
-  void copyText() {
+  void copyText(Message message) {
     Clipboard.setData(ClipboardData(text: message.msg))
         .then((_) => Get.snackbar('Copied', 'Text copied successfully'));
   }
 
-  void editMessage(String updatedMessage) {
+  void editMessage(Message message,String updatedMessage) {
     APIs.updateMessage(message, updatedMessage);
   }
 
-  void deleteMessage() {
+  void deleteMessage(Message message) {
     APIs.deleteMessage(message);
   }
 
