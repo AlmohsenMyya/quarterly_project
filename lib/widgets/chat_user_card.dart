@@ -37,7 +37,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: InkWell(
           onTap: () {
-            Get.to(ChatScreen(user: widget.user,), binding: ChatBinding(widget.user));
+            Get.to(() => ChatScreen(user: widget.user,), binding: ChatBinding(widget.user));
             //for navigating to chat screen
             // Navigator.push(
             //   context,
