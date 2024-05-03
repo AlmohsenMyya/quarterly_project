@@ -6,7 +6,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../../api/apis.dart';
 import '../../helper/my_date_util.dart';
 import '../../models/chat_user.dart';
-import '../../screens/view_profile_screen.dart';
+import '../../screens/profile/view_profile_screen.dart';
 
 
 Widget buildAppBar(BuildContext context, ChatUser user) {
@@ -14,7 +14,7 @@ Widget buildAppBar(BuildContext context, ChatUser user) {
 
   return SafeArea(
     child: InkWell(
-      onTap: () => Get.to(ViewProfileScreen(user: user)),
+      onTap: () => Get.to(() => ViewProfileScreen(user: user)),
       child: StreamBuilder(
         stream: APIs.getUserInfo(user),
         builder: (context, snapshot) {
