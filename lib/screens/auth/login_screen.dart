@@ -39,7 +39,7 @@ class LoginScreen extends GetView<UserController> {
                 height: 400,
                 width: 1000,
                 child: Image.asset(
-                  'images/icon.png',
+                  'images/d_logo.png',
                   fit: BoxFit.fitHeight,
                 ))),
 
