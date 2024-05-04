@@ -16,6 +16,8 @@ import '../screens/chat/message_card/message_card.dart';
 
 class ProfileController extends GetxController {
   final formKey = GlobalKey<FormState>();
+  RxBool can_update_name = false.obs;
+  RxBool can_update_about = false.obs;
   String? image;
 
   void showBottomSheet() {

@@ -29,25 +29,16 @@ class ProfileScreen extends GetView<ProfileController> {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       // for hiding keyboard
-      onTap: FocusScope.of(context).unfocus,
+      onTap: FocusScope
+          .of(context)
+          .unfocus,
       child: Scaffold(
-          //app bar
+        //app bar
           appBar: AppBar(title: const Text(MyString.profileScreenTitle)),
 
           //floating button to log out
-          floatingActionButton: Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: FloatingActionButton.extended(
-                backgroundColor: Colors.redAccent,
-                onPressed: () async {
-                  controller.logout();
-                },
-                icon: const Icon(Icons.logout),
-                label: const Text(MyString.logoutButtonLabel)),
-          ),
 
           //body
           body: Form(
@@ -67,30 +58,30 @@ class ProfileScreen extends GetView<ProfileController> {
                         _image != null
                             ?
 
-                            //local image
-                            ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(mq.height * .1),
-                                child: Image.file(File(_image!),
-                                    width: mq.height * .2,
-                                    height: mq.height * .2,
-                                    fit: BoxFit.cover))
+                        //local image
+                        ClipRRect(
+                            borderRadius:
+                            BorderRadius.circular(mq.height * .1),
+                            child: Image.file(File(_image!),
+                                width: mq.height * .2,
+                                height: mq.height * .2,
+                                fit: BoxFit.cover))
                             :
 
-                            //image from server
-                            ClipRRect(
-                                borderRadius:
-                                    BorderRadius.circular(mq.height * .1),
-                                child: CachedNetworkImage(
-                                  width: mq.height * .2,
-                                  height: mq.height * .2,
-                                  fit: BoxFit.cover,
-                                  imageUrl: user.image,
-                                  errorWidget: (context, url, error) =>
-                                      const CircleAvatar(
-                                          child: Icon(CupertinoIcons.person)),
-                                ),
-                              ),
+                        //image from server
+                        ClipRRect(
+                          borderRadius:
+                          BorderRadius.circular(mq.height * .1),
+                          child: CachedNetworkImage(
+                            width: mq.height * .2,
+                            height: mq.height * .2,
+                            fit: BoxFit.cover,
+                            imageUrl: user.image,
+                            errorWidget: (context, url, error) =>
+                            const CircleAvatar(
+                                child: Icon(CupertinoIcons.person)),
+                          ),
+                        ),
 
                         //edit image button
                         Positioned(
@@ -123,13 +114,22 @@ class ProfileScreen extends GetView<ProfileController> {
                     // name input field
                     TextFormField(
                       initialValue: user.name,
+                      onChanged: (val) {
+                        if (APIs.me.name == val) {
+                          controller.can_update_name.value = false;
+                        }else{
+
+                          controller.can_update_name.value = true;
+                        }
+                      },
                       onSaved: (val) => APIs.me.name = val ?? '',
-                      validator: (val) => val != null && val.isNotEmpty
+                      validator: (val) =>
+                      val != null && val.isNotEmpty
                           ? null
                           : MyString.requiredField,
                       decoration: InputDecoration(
                           prefixIcon:
-                              const Icon(Icons.person, color: Colors.blue),
+                          const Icon(Icons.person, color: Colors.blue),
                           border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(12)),
                           hintText: 'D . Family',
@@ -142,10 +142,22 @@ class ProfileScreen extends GetView<ProfileController> {
                     // about input field
                     TextFormField(
                       initialValue: user.about,
+                      onChanged: (val) {
+
+                        print("$val ***/*///* ${APIs.me.about } //**// ${controller.can_update_about.value}");
+                        if (APIs.me.about == val) {
+                          controller.can_update_about.value = false;
+                        }else{
+
+                          controller.can_update_about.value = true;
+                        }
+                      },
                       onSaved: (val) => APIs.me.about = val ?? '',
-                      validator: (val) => val != null && val.isNotEmpty
-                          ? null
-                          : MyString.requiredField,
+                      validator: (val) {
+                        return val != null && val.isNotEmpty
+                            ? null
+                            : MyString.requiredField;
+                      },
                       decoration: InputDecoration(
                           prefixIcon: const Icon(Icons.info_outline,
                               color: Colors.blue),
@@ -159,23 +171,44 @@ class ProfileScreen extends GetView<ProfileController> {
                     SizedBox(height: mq.height * .05),
 
                     // update profile button
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                          shape: const StadiumBorder(),
-                          minimumSize: Size(mq.width * .5, mq.height * .06)),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          _formKey.currentState!.save();
-                          APIs.updateUserInfo().then((value) {
-                            Dialogs.showSnackbar(
-                                context, 'Profile Updated Successfully!');
-                          });
-                        }
-                      },
-                      icon: const Icon(Icons.edit, size: 28),
-                      label:
-                          const Text('UPDATE', style: TextStyle(fontSize: 16)),
-                    )
+                   Obx(() =>  ElevatedButton.icon(
+                     style: ElevatedButton.styleFrom(
+                         backgroundColor: (controller.can_update_name.value ==
+                             true ||
+                             controller.can_update_about.value == true)
+                             ? Colors.greenAccent : Colors.white24,
+                         shape: const StadiumBorder(),
+                         minimumSize: Size(mq.width * .5, mq.height * .06)),
+                     onPressed: () {
+                       if (_formKey.currentState!.validate()) {
+                         _formKey.currentState!.save();
+                         if ((controller.can_update_name.value ==
+                             true ||
+                             controller.can_update_about.value == true)) {
+                           APIs.updateUserInfo().then((value) {
+                             Dialogs.showSnackbar(
+                                 context, 'Profile Updated Successfully!');
+                           }); } else {
+                           Dialogs.showErrorSnackbar(
+                               context, MyString.noThingChange );
+                         }
+                       }
+                     },
+                     icon: Icon(Icons.edit, size: 28),
+                     label:
+                     const Text('UPDATE', style: TextStyle(fontSize: 16)),
+                   ) ),
+
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 10 , top:  50),
+                      child: FloatingActionButton.extended(
+                          backgroundColor: Colors.redAccent,
+                          onPressed: () async {
+                            controller.logout();
+                          },
+                          icon: const Icon(Icons.logout),
+                          label: const Text(MyString.logoutButtonLabel)),
+                    ),
                   ],
                 ),
               ),

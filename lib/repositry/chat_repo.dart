@@ -225,13 +225,7 @@ class ChatRepository {
         .set({}).then((value) => sendMessage(chatUser, msg, type));
   }
 
-  // for updating user information
-  static Future<void> updateUserInfo() async {
-    await firestore.collection('users').doc(my_account.uid).update({
-      'name': me.name,
-      'about': me.about,
-    });
-  }
+
 
   // update profile picture of user
   static Future<void> updateProfilePicture(File file) async {

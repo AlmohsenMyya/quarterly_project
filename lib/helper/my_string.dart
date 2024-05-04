@@ -7,4 +7,6 @@ class MyString {
   static const String aboutInputLabel = 'About';
   static const String updateButtonLabel = 'UPDATE';
   static const String requiredField = 'Required Field';
+
+  static const String noThingChange = 'No thing change!!';
 }
