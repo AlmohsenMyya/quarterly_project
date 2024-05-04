@@ -23,6 +23,9 @@ class MessageCard extends StatelessWidget {
 
   Widget _blueMessage(MessageDetailController controller) {
 
+    if (message.read.isEmpty) {
+      controller.updateMessageReadStatus(message);
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -124,28 +127,26 @@ class MessageCard extends StatelessWidget {
   Widget _buildMessageContent() {
     return message.type == Type.text
         ? Text(
-            message.msg,
-            style: const TextStyle(fontSize: 15, color: Colors.black87),
-          )
+      message.msg,
+      style: const TextStyle(fontSize: 15, color: Colors.black87),
+    )
         : ClipRRect(
-            borderRadius: BorderRadius.circular(15),
-            child: Image.network(
-              message.msg,
-              loadingBuilder: (context, child, loadingProgress) {
-                if (loadingProgress == null) return child;
-                return const CircularProgressIndicator();
-              },
-              errorBuilder: (context, error, stackTrace) =>
-                  const Icon(Icons.error),
-            ),
-          );
+      borderRadius: BorderRadius.circular(15),
+      child: Image.network(
+        message.msg,
+        loadingBuilder: (context, child, loadingProgress) {
+          if (loadingProgress == null) return child;
+          return const CircularProgressIndicator();
+        },
+        errorBuilder: (context, error, stackTrace) =>
+        const Icon(Icons.error),
+      ),
+    );
   }
 
-  void _showBottomSheet(
-    BuildContext context,
-    MessageDetailController controller,
-    bool isMe,
-  ) {
+  void _showBottomSheet(BuildContext context,
+      MessageDetailController controller,
+      bool isMe,) {
     showModalBottomSheet(
       context: context,
       shape: const RoundedRectangleBorder(
@@ -190,11 +191,35 @@ class MessageCard extends StatelessWidget {
                 },
               ),
             const Divider(color: Colors.black54),
-            _OptionItem(
-              icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
-              name: 'Sent At: ${controller.getFormattedSentTime(message)}',
-              onTap: () {},
+            FutureBuilder<String>(
+              future: controller.getFormattedSentTime(message),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // While the future is loading, return a placeholder or loading indicator
+                  return _OptionItem(
+                    icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
+                    name: 'Sent At: .....',
+                    onTap: () {},
+                  );
+                } else if (snapshot.hasError) {
+                  // If an error occurred, handle it accordingly
+                  return _OptionItem(
+                    icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
+                    name: 'Sent At: ....',
+                    onTap: () {},
+                  );
+                } else {
+                  // If the future has completed successfully, display the formatted time
+                  return _OptionItem(
+                    icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
+                    name: 'Sent At: ${snapshot.data}',
+                    onTap: () {},
+                  )
+                ;
+              }
+              },
             ),
+
             _OptionItem(
               icon: const Icon(Icons.remove_red_eye, color: Colors.green),
               name: 'Read At: ${controller.getFormattedReadTime(message)}',
@@ -206,39 +231,41 @@ class MessageCard extends StatelessWidget {
     );
   }
 
-  void _showMessageUpdateDialog(
-      BuildContext context, MessageDetailController controller) {
+  void _showMessageUpdateDialog(BuildContext context,
+      MessageDetailController controller) {
     String updatedMsg = message.msg;
 
     showDialog(
       context: context,
-      builder: (_) => AlertDialog(
-        contentPadding:
+      builder: (_) =>
+          AlertDialog(
+            contentPadding:
             const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Update Message'),
-        content: TextFormField(
-          initialValue: updatedMsg,
-          maxLines: null,
-          onChanged: (value) => updatedMsg = value,
-          decoration: const InputDecoration(border: OutlineInputBorder()),
-        ),
-        actions: [
-          MaterialButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel',
-                style: TextStyle(color: Colors.blue, fontSize: 16)),
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20)),
+            title: const Text('Update Message'),
+            content: TextFormField(
+              initialValue: updatedMsg,
+              maxLines: null,
+              onChanged: (value) => updatedMsg = value,
+              decoration: const InputDecoration(border: OutlineInputBorder()),
+            ),
+            actions: [
+              MaterialButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Cancel',
+                    style: TextStyle(color: Colors.blue, fontSize: 16)),
+              ),
+              MaterialButton(
+                onPressed: () {
+                  controller.editMessage(message, updatedMsg);
+                  Get.back();
+                },
+                child: const Text('Update',
+                    style: TextStyle(color: Colors.blue, fontSize: 16)),
+              ),
+            ],
           ),
-          MaterialButton(
-            onPressed: () {
-              controller.editMessage(message, updatedMsg);
-              Get.back();
-            },
-            child: const Text('Update',
-                style: TextStyle(color: Colors.blue, fontSize: 16)),
-          ),
-        ],
-      ),
     );
   }
 }

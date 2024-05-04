@@ -316,13 +316,13 @@ class ChatRepository {
         sendPushNotification(chatUser, type == Type.text ? msg : 'image'));
   }
 
-  //update read status of message
-  static Future<void> updateMessageReadStatus(Message message) async {
-    firestore
-        .collection('chats/${getConversationID(message.fromId)}/messages/')
-        .doc(message.sentDoc)
-        .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
-  }
+  // //update read status of message
+  // static Future<void> updateMessageReadStatus(Message message) async {
+  //   firestore
+  //       .collection('chats/${getConversationID(message.fromId)}/messages/')
+  //       .doc(message.sentDoc)
+  //       .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
+  // }
 
   //get only last message of a specific chat
   static Stream<QuerySnapshot<Map<String, dynamic>>> getLastMessage(

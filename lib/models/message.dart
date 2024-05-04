@@ -20,7 +20,6 @@ class Message {
   late final dynamic sentDoc ;
 
   Message.fromJson(Map<String, dynamic> json) {
-    print("---------------------- ${json['sent']}");
     toId = json['toId'].toString();
     msg = json['msg'].toString();
     read = json['read'].toString();
