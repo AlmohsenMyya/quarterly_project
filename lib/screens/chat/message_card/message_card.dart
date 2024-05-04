@@ -44,9 +44,23 @@ class MessageCard extends StatelessWidget {
         ),
         Padding(
           padding: EdgeInsets.only(right: 10),
-          child: Text(
-            controller.getFormattedSentTime(message),
-            style: const TextStyle(fontSize: 13, color: Colors.white),
+          child: FutureBuilder<String>(
+            future: controller.getFormattedSentTime(message),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                // While the future is loading, return a placeholder or loading indicator
+                return Text("...");
+              } else if (snapshot.hasError) {
+                // If an error occurred, handle it accordingly
+                return Text('...');
+              } else {
+                // If the future has completed successfully, display the formatted time
+                return Text(
+                  snapshot.data!,
+                  style: const TextStyle(fontSize: 13, color: Colors.white),
+                );
+              }
+            },
           ),
         ),
       ],
@@ -67,9 +81,23 @@ class MessageCard extends StatelessWidget {
                 size: 20,
               ),
             const SizedBox(width: 2),
-            Text(
-              controller.getFormattedSentTime(message),
-              style: const TextStyle(fontSize: 13, color: Colors.white),
+            FutureBuilder<String>(
+              future: controller.getFormattedSentTime(message),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  // While the future is loading, return a placeholder or loading indicator
+                  return Text("...");
+                } else if (snapshot.hasError) {
+                  // If an error occurred, handle it accordingly
+                  return Text('....');
+                } else {
+                  // If the future has completed successfully, display the formatted time
+                  return Text(
+                    snapshot.data!,
+                    style: const TextStyle(fontSize: 13, color: Colors.white),
+                  );
+                }
+              },
             ),
           ],
         ),

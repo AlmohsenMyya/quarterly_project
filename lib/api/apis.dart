@@ -287,12 +287,14 @@ class APIs {
 
     //message to send
     final Message message = Message(
+        sentDoc: time,
         toId: chatUser.id,
         msg: msg,
         read: '',
         type: type,
         fromId: my_account.uid,
-        sent: time);
+        sent: FieldValue.serverTimestamp());
+
 
     final ref = firestore
         .collection('chats/${getConversationID(chatUser.id)}/messages/');
@@ -304,7 +306,7 @@ class APIs {
   static Future<void> updateMessageReadStatus(Message message) async {
     firestore
         .collection('chats/${getConversationID(message.fromId)}/messages/')
-        .doc(message.sent)
+        .doc(message.sentDoc)
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
 
@@ -343,8 +345,8 @@ class APIs {
   static Future<void> deleteMessage(Message message) async {
     await firestore
         .collection('chats/${getConversationID(message.toId)}/messages/')
-        .doc(message.sent)
-        .delete();
+        .doc(message.sentDoc)
+        .delete().onError((error, stackTrace) => print("=======54fd5vf5d==$error"));
 
     if (message.type == Type.image) {
       await storage.refFromURL(message.msg).delete();
@@ -355,7 +357,7 @@ class APIs {
   static Future<void> updateMessage(Message message, String updatedMsg) async {
     await firestore
         .collection('chats/${getConversationID(message.toId)}/messages/')
-        .doc(message.sent)
+        .doc(message.sentDoc)
         .update({'msg': updatedMsg});
   }
 }

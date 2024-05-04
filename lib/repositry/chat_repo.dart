@@ -302,12 +302,13 @@ class ChatRepository {
 
     //message to send
     final Message message = Message(
+      sentDoc: time,
         toId: chatUser.id,
         msg: msg,
         read: '',
         type: type,
         fromId: my_account.uid,
-        sent: time);
+        sent: FieldValue.serverTimestamp());
 
     final ref = firestore
         .collection('chats/${getConversationID(chatUser.id)}/messages/');
@@ -319,7 +320,7 @@ class ChatRepository {
   static Future<void> updateMessageReadStatus(Message message) async {
     firestore
         .collection('chats/${getConversationID(message.fromId)}/messages/')
-        .doc(message.sent)
+        .doc(message.sentDoc)
         .update({'read': DateTime.now().millisecondsSinceEpoch.toString()});
   }
 
@@ -358,7 +359,7 @@ class ChatRepository {
   static Future<void> deleteMessage(Message message) async {
     await firestore
         .collection('chats/${getConversationID(message.toId)}/messages/')
-        .doc(message.sent)
+        .doc(message.sentDoc)
         .delete();
 
     if (message.type == Type.image) {
@@ -370,7 +371,7 @@ class ChatRepository {
   static Future<void> updateMessage(Message message, String updatedMsg) async {
     await firestore
         .collection('chats/${getConversationID(message.toId)}/messages/')
-        .doc(message.sent)
+        .doc(message.sentDoc)
         .update({'msg': updatedMsg});
   }
 }

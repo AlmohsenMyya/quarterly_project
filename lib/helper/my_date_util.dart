@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class MyDateUtil {
   // for getting formatted time from milliSecondsSinceEpochs String
-  static String getFormattedTime(
-      {required BuildContext context, required String time}) {
+  static Future<String> getFormattedTime(
+      {required BuildContext context, required String time}) async {
+    await Future.delayed(Duration(microseconds: 500));
     final date = DateTime.fromMillisecondsSinceEpoch(int.parse(time));
     return TimeOfDay.fromDateTime(date).format(context);
   }

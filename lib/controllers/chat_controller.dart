@@ -87,7 +87,7 @@ class ChatController extends GetxController {
   static Future<void> deleteMessage(Message message) async {
     await firestore
         .collection('chats/${getConversationID(message.toId)}/messages/')
-        .doc(message.sent)
+        .doc(message.sentDoc)
         .delete();
 
     if (message.type == Type.image) {
@@ -99,7 +99,7 @@ class ChatController extends GetxController {
   static Future<void> updateMessage(Message message, String updatedMsg) async {
     await firestore
         .collection('chats/${getConversationID(message.toId)}/messages/')
-        .doc(message.sent)
+        .doc(message.sentDoc)
         .update({'msg': updatedMsg});
   }
 }

@@ -37,8 +37,8 @@ class MessageDetailController extends GetxController {
     APIs.deleteMessage(message);
   }
 
-  String getFormattedSentTime( Message message) {
-    print(" getFormattedSentTime ${message.msg}");
+  Future<String> getFormattedSentTime( Message message) {
+
     return MyDateUtil.getFormattedTime(
       context: Get.context!,
       time: message.sent,
