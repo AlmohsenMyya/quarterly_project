@@ -13,6 +13,7 @@ dependencies:
   firebase_analytics:
 
   get: ^4.6.6
+  image_cropper: ^6.0.0
   # For using cupertino icons
   cupertino_icons: ^1.0.6
 
