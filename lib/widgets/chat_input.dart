@@ -1,6 +1,5 @@
 import 'package:d_family/controllers/chat_controller.dart';
 import 'package:d_family/helper/dialogs.dart';
-import 'package:d_family/widgets/send_widget.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
