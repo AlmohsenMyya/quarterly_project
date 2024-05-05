@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:d_family/controllers/edit_image_controller.dart';
+import 'package:d_family/widgets/edit_image/edit_image.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -9,16 +11,19 @@ import 'package:image_picker/image_picker.dart';
 import '../models/chat_user.dart';
 import '../models/message.dart';
 import '../repositry/chat_repo.dart';
+import '../widgets/edit_image/edit_image_binding.dart';
 
 class ChatController extends GetxController {
   final ChatRepository repository;
   final TextEditingController textController = TextEditingController();
   final RxBool showEmoji = false.obs;
   final RxBool isUploading = false.obs;
+  final RxBool isGreen = false.obs;
   final RxList<Message> messages = <Message>[].obs;
 
   // for authentication
   static FirebaseAuth get auth => FirebaseAuth.instance;
+
   // for accessing cloud firestore database
   static FirebaseFirestore firestore = FirebaseFirestore.instance;
   FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -27,6 +32,7 @@ class ChatController extends GetxController {
   static FirebaseStorage storage = FirebaseStorage.instance;
 
   ChatController(this.repository);
+
   static User get my_account => auth.currentUser!;
   static late ChatUser me; // for storing self information
 
@@ -57,6 +63,7 @@ class ChatController extends GetxController {
     final messageText = textController.text;
     ChatRepository.sendMessage(repository.user, messageText, Type.text);
     textController.text = '';
+    isGreen.value = false;
   }
 
   void toggleEmoji() {
@@ -72,7 +79,9 @@ class ChatController extends GetxController {
     if (image != null) {
       isUploading.value = true;
       final file = File(image.path);
-      await repository.sendImage(file);
+      Get.to(() => ImageEditorPage(pickedFile: file),
+          binding: EditImageBinding(file,repository));
+      // await repository.sendImage(file);
       isUploading.value = false;
     }
   }
